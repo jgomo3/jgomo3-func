@@ -1,8 +1,59 @@
 # Jgomo3::Func
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/jgomo3/func`. To experiment with that code, run `bin/console` for an interactive prompt.
+By requiring this Gem, some extensions will be applied to Ruby core
+classes (similar to what Activesupport does).
 
-TODO: Delete this and the text above, and describe your gem
+The extensions is a collection of methods I find useful for any
+project. This is a quick list:
+
+## `then_if` and `then_unless`
+
+Whenever you use `then` guarded by some simple ternary logic, ej:
+
+```
+number.then { _1.positive? ? _1 * 1000 : _1 }
+```
+
+you can use `then_if` (or `then_unless`):
+
+```
+number.then_if(:positive?) { _1 * 1000 }
+number.then_if(->(x){ x.positive? }) { _1 * 1000 }
+```
+
+`then_if` and `then_unless` receive an argument which will be used as
+a function, first by verifying it responds to `call`, lastly, by
+trying to convert it to a **Proc**. That's why this method works with
+**Symbols**, because they respond to
+[to_proc](https://devdocs.io/ruby~2.7/symbol#method-i-to_proc).
+
+## `complement`
+
+Generates a Proc that negates the object if it would have been used as
+a function.
+
+```
+negative = :positive?.complement
+negative.call(1) # => false
+negative.call(-1) # => true
+```
+
+`complement` will use the receiver as a function first by verifying it
+responds to `call` it, lastly, by trying to convert it to a
+**Proc**. That's why this method works with **Symbols**, because they
+respond to
+[to_proc](https://devdocs.io/ruby~2.7/symbol#method-i-to_proc).
+
+## `constantly`
+Generates a Proc that always returns it's receiver.
+
+```
+constantly_true = true.constantly
+constantly_true.call(12345) # => true
+constantly_true.call('Hola') # => true
+constantly_true.call(nil) # => true
+constantly_true.call(Object.new) # => true
+```
 
 ## Installation
 
@@ -19,10 +70,6 @@ And then execute:
 Or install it yourself as:
 
     $ gem install jgomo3-func
-
-## Usage
-
-TODO: Write usage instructions here
 
 ## Development
 

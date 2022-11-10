@@ -24,8 +24,12 @@ GEM
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
     thor (0.20.3)
+    webrick (1.7.0)
+    yard (0.9.28)
+      webrick (~> 1.7.0)
 
 PLATFORMS
+  ruby
   x86_64-linux
 
 DEPENDENCIES
@@ -33,6 +37,7 @@ DEPENDENCIES
   jgomo3-func!
   rake (~> 12.0)
   rspec (~> 3.0)
+  yard
 
 BUNDLED WITH
    2.3.7
