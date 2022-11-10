@@ -1,0 +1,38 @@
+PATH
+  remote: .
+  specs:
+    jgomo3-func (0.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    codelog (0.8.0)
+      thor (~> 0.19)
+    diff-lcs (1.5.0)
+    rake (12.3.3)
+    rspec (3.12.0)
+      rspec-core (~> 3.12.0)
+      rspec-expectations (~> 3.12.0)
+      rspec-mocks (~> 3.12.0)
+    rspec-core (3.12.0)
+      rspec-support (~> 3.12.0)
+    rspec-expectations (3.12.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.12.0)
+    rspec-mocks (3.12.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.12.0)
+    rspec-support (3.12.0)
+    thor (0.20.3)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  codelog
+  jgomo3-func!
+  rake (~> 12.0)
+  rspec (~> 3.0)
+
+BUNDLED WITH
+   2.3.7
