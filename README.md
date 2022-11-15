@@ -3,6 +3,10 @@
 By requiring this Gem, some extensions will be applied to Ruby core
 classes (similar to what Activesupport does).
 
+```
+require 'jgomo3/func'
+```
+
 The extensions is a collection of methods I find useful for any
 project. This is a quick list:
 
