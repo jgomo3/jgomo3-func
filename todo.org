@@ -1,0 +1,58 @@
+#+title: Potential changes
+#+author: Jesús Gómez <jgomo3@gmail.com>
+* TODO Define alias yield_self_if of then_if (and for unless case too)
+* TODO Explain in API and README that for cases with both ~if~ and ~else~ clauses, it is better to just avoid these functions
+* TODO Define nil_if and nil_unless
+For the pattern ~object.then_if(condition){ nil }~, this could be used
+instead: ~object.nil_if(condition)~.
+
+This pattern appears when chaining with the "safe navigation operator" (&.). E.g:
+
+#+begin_ruby
+object.tx_1.nil_if(condition)&.tx_2&._&._&.tx_3
+#+end_ruby
+* TODO Define map_if and map_unless
+Applies the block to the processed element only if the condition is
+true.
+
+~data.map_if(condition){ f(_1) }~ would be equivalent to:
+
+#+begin_ruby
+data.map{ condition(_1) ? f(_1) : _1 }
+#+end_ruby
+
+Not the same to neither of the following patterns:
+
+#+begin_ruby
+data.filter{ condition(_1) }.map{ f_1 }
+data.map{ f_1 }.filter{ condition(_1) }
+#+end_ruby
+
+~map_if~ and ~map~ will produce collection of the same
+cardinality. ~filter{}.map{}~ or ~map{}.filter{}~ can produce
+collection with lower cardinality of ~map~.
+
+* TODO Define each_if and each_unless
+In the same spirit as the other functions of this gem,
+~data.each_if(condition) { f(_1) }~ should be the same as:
+
+#+begin_ruby
+data.each do
+  if condition(_1)
+    f(_1)
+  else
+    _1
+  end
+end
+#+end_ruby
+
+It should also support the other forms of ~each~ where it receives
+arguments that will be "appended" to the enumerator call, and the form
+where it doesn't receive nor arguments neither block.
+
+In all cases, it should be in a way that "makes sense".
+
+* TODO Define tap_if and tap_unless
+
+This one is the easiest to "understand" as it can be read as "make
+side effect if ...".
