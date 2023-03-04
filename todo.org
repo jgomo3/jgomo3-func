@@ -56,3 +56,31 @@ In all cases, it should be in a way that "makes sense".
 
 This one is the easiest to "understand" as it can be read as "make
 side effect if ...".
+
+* TODO Merge procer default to_proc implementation as an explicit call
+
+[[../procer/ge][../proce.gemspec]] defines a default =to_proc= to all objects. If you
+don't want to add that behaviour to your system, you can use this
+proposed method to explicitly as for the default procer propose.
+
+The idea... With procer, you can do:
+
+#+begin_ruby
+['1', 2, 3 '4', '5'].filter(&Numeric) # => [2, 3]
+#+end_ruby
+
+Because *procer* defines a default ~to_proc~ method for classes, which
+is to compare the class with it's argument using the "Case Equality
+(~===~)" operator.
+
+But without procer, this new method, let's say it is called =procer=,
+we could do:
+
+#+begin_ruby
+# Option 1
+['1', 2, 3 '4', '5'].filter(&procer(Numeric)) # => [2, 3]
+
+# Option 2
+['1', 2, 3 '4', '5'].filter(&Numeric.procer) # => [2, 3]
+#+end_ruby
+
