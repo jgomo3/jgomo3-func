@@ -26,10 +26,11 @@ RSpec.describe Jgomo3::Func do
       expect(negative.call(1)).to be_falsey
     end
 
-    it 'raises an ArgumentError when the object is not "Callable"' do
-      o = Object.new
-      o.instance_eval('undef :to_proc') rescue # Try to remove to_proc if exists
-      expect { o.complement }.to raise_error(ArgumentError, /complement/)
+    it 'provides the locial opposite value of a not callable object' do
+      subject = false.complement
+      expect(subject).to be_truthy
+      subject = true.complement
+      expect(subject).to be_falsey
     end
   end
   
@@ -39,12 +40,16 @@ RSpec.describe Jgomo3::Func do
       object_2 = Object.new
       combination = object_1.then_if(true.constantly) { [object_1, object_2] }
       expect(combination).to eq([object_1, object_2])
+      combination = object_1.then_if(true) { [object_1, object_2] }
+      expect(combination).to eq([object_1, object_2])
     end
 
     it 'ignores the given block if condition doesn\'t hold true' do
       object_1 = Object.new
       object_2 = Object.new
       combination = object_1.then_if(false.constantly) { [object_1, object_2] }
+      expect(combination).to eq(object_1)
+      combination = object_1.then_if(false) { [object_1, object_2] }
       expect(combination).to eq(object_1)
     end
   end
@@ -55,12 +60,16 @@ RSpec.describe Jgomo3::Func do
       object_2 = Object.new
       combination = object_1.then_unless(false.constantly) { [object_1, object_2] }
       expect(combination).to eq([object_1, object_2])
+      combination = object_1.then_unless(false) { [object_1, object_2] }
+      expect(combination).to eq([object_1, object_2])
     end
 
     it 'ignores the given block if condition holds true' do
       object_1 = Object.new
       object_2 = Object.new
       combination = object_1.then_unless(true.constantly) { [object_1, object_2] }
+      expect(combination).to eq(object_1)
+      combination = object_1.then_unless(true) { [object_1, object_2] }
       expect(combination).to eq(object_1)
     end
   end
