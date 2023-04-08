@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jgomo3-func (1.0.0)
+    jgomo3-func (1.0.1)
 
 GEM
   remote: https://rubygems.org/
