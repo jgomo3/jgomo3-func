@@ -1,5 +1,9 @@
 #+title: Potential changes
 #+author: Jesús Gómez <jgomo3@gmail.com>
+* TODO Make Set implement call so it returns it's argument if it is contained
+* DONE Make then_if use itself if not argument provided
+CLOSED: [2024-10-08 Tue 00:06]
+* TODO Make symbols implement call so they are methods on the receiver
 * TODO Define alias yield_self_if of then_if (and for unless case too)
 * TODO Explain in API and README that for cases with both ~if~ and ~else~ clauses, it is better to just avoid these functions
 * TODO Define nil_if and nil_unless

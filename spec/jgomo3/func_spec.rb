@@ -52,6 +52,28 @@ RSpec.describe Jgomo3::Func do
       combination = object_1.then_if(false) { [object_1, object_2] }
       expect(combination).to eq(object_1)
     end
+
+    it 'calls `itself` on the receiver to obtaine the criteria' do
+      true_value = true
+      false_value = false
+      symbol_1_value = :upcase # Some implementation would treat this
+                               # as a callable anyways, and by chance
+                               # work, because the method `upcase`
+                               # exists
+      symbol_2_value = :_jojoto_49827_ # But when the method doesn't
+                                       # exist, a symbol should still
+                                       # interpreted as a boolean
+                                       # true.
+
+      result = true_value.then_if { :effect }
+      expect(result).to eq(:effect)
+      result = false_value.then_if { :effect }
+      expect(result).to eq(false_value)
+      result = symbol_1_value.then_if { :effect }
+      expect(result).to eq(:effect)
+      result = symbol_2_value.then_if { :effect }
+      expect(result).to eq(:effect)
+    end
   end
 
   context '`then_unless`' do

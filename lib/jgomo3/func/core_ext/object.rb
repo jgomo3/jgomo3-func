@@ -32,6 +32,15 @@ class Object
     end
   end
 
+  def callable_for(criteria)
+    case
+    when criteria.respond_to?(:call)
+      criteria
+    when criteria.respond_to?(:to_proc)
+      criteria.to_proc
+    end
+  end
+
   # Applies the given block to the object if the criteria applied on
   # it holds true.  If not, it defaults to the object as if `then_if`
   # was not called.
@@ -40,20 +49,26 @@ class Object
   # criteria is evaluated with the object as argument. It not, then
   # the criteria will be interpreted by it's truth value.
   #
+  # If no criteria is given, then the receiver truth value will be
+  # considered the criteria.
+  #
   #   +1.then_if(:positive?) { _1 * 1000 } => 1_000
   #   -1.then_if(:positive?) { _1 * 1000 } => -1
   #   +1.then_if(true)       { _1 * 1000 } => 1_000
   #   +1.then_if(false)      { _1 * 1000 } => 1
-  def then_if(criteria)
-    callable = case
-               when criteria.respond_to?(:call)
-                 criteria
-               when criteria.respond_to?(:to_proc)
-                 criteria.to_proc
+  #   true.then_if           { :effect }   => :effect
+  #   false.then_if          { :effect }   => false
+  def then_if(*args)
+    condition = if args.empty?
+                  self
+                elsif args.size == 1
+                  criteria = args.first
+                  callable_for(criteria)
+                    .then{|callable| !!(callable ? callable.call(self) : criteria) }
+                else
+                  raise ArgumentError, "Wrong number of arguments (given #{args.size}, expected 0 or 1)"
                end
 
-    condition = callable ? callable.call(self) : criteria
-    
     if condition
       yield self
     else
