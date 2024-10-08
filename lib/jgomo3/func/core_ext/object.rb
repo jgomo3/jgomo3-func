@@ -19,12 +19,7 @@ class Object
   #   :nil?.complement.call(nil) => false
   #   false.complement => true
   def complement
-    callable = case
-               when respond_to?(:call)
-                 self
-               when respond_to?(:to_proc)
-                 self.to_proc
-               end
+    callable = callable_for
     if callable
       ->(*args, **kwargs, &blk) { !callable.call(*args, **kwargs, &blk) }
     else
@@ -32,12 +27,12 @@ class Object
     end
   end
 
-  def callable_for(criteria)
+  def callable_for
     case
-    when criteria.respond_to?(:call)
-      criteria
-    when criteria.respond_to?(:to_proc)
-      criteria.to_proc
+    when self.respond_to?(:call)
+      self
+    when self.respond_to?(:to_proc)
+      self.to_proc
     end
   end
 
@@ -63,7 +58,7 @@ class Object
                   self
                 elsif args.size == 1
                   criteria = args.first
-                  callable_for(criteria)
+                  criteria.callable_for
                     .then{|callable| !!(callable ? callable.call(self) : criteria) }
                 else
                   raise ArgumentError, "Wrong number of arguments (given #{args.size}, expected 0 or 1)"
